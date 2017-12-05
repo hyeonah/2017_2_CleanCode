@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 public class Sorting {
-	private static int[] numbers;
-	private static char[] characters;
+	private static int[] numbers = null;
+	private static char[] characters = null;
 	private static int menuNum, size;
 	private static char typeOfData;
 	private static boolean showInitialScreen = true;
@@ -11,7 +11,7 @@ public class Sorting {
 	public static void main(String[] args) {
 		while (showInitialScreen == true) {      
 	        showMenu();
-	        selectMenuNum();
+	        selectMenu();
 		}
 	}
 	
@@ -26,80 +26,83 @@ public class Sorting {
         System.out.println();
 	}
 	
-	private static void selectMenuNum() {
+	private static void selectMenu() {
 		menuNum = scan.nextInt();
 		if (menuNum == 1) {
-			inputData();
-        }
-        else if (menuNum == 2) {
-        	sortAscendingOrder();        	
-        }
-        else if (menuNum == 3) {
-        	sortDescendingOrder();       
-        }
-        else if (menuNum == 4) {
-        	showInitialScreen = false; 
-        } 
-	}
-	
-	private static void inputData() {
-		selectTypeOfData();
+			selectTypeOfData(); 			
+		}
+		else if ((typeOfData == 'n') && (menuNum != 4)) { //괄호 안 수정하기!!!!!!
+			selectMenuForNumber(menuNum);
+		}
+		else if ((typeOfData == 'c') && (menuNum != 4)) {
+			selectMenuForCharacter(menuNum);
+		}
+		else if (menuNum == 4) {
+			showInitialScreen = false; 
+		}
 	}
 	
 	private static void selectTypeOfData() {
-		System.out.println("The type of data (n or c): ");
+		System.out.print("The type of data (n or c): ");
     	typeOfData = scan.next().charAt(0);
     	inputNumberOfData();
 	}
 	
 	private static void inputNumberOfData() {
-		System.out.println("The number of Data: ");
+		System.out.print("The number of Data: ");
     	size = scan.nextInt();
-    	setSizeOfArray();
-	}
-	
-	private static void setSizeOfArray() {
-		if (typeOfData == 'n') {
-    		numbers = new int[size];
-    	}
-    	else if (typeOfData == 'c') {
-    		characters = new char[size];
-    	}
-		inputElements();
-	}
-	
-	private static void inputElements() {
-		System.out.println("data: ");
     	if (typeOfData == 'n') {
-    		inputElementsOfNumbers();
+    		setSizeOfnumbers();
     	}
     	else if (typeOfData == 'c') {
-    		inputElementsOfCharacters();
+    		setSizeOfCharacters();
     	}
+	}
+	
+	private static void setSizeOfnumbers() {
+    	numbers = new int[size];
+    	inputElementsOfNumbers();
 	}
 	
 	private static void inputElementsOfNumbers() {
+		System.out.print("data: "); //중복!!!!!!!!!!!!!!!!
     	for (int i = 0; i < size; i++) {
             numbers[i] = scan.nextInt();
         }
     	System.out.println();
 	}
 	
+	private static void setSizeOfCharacters() {
+    	characters = new char[size];
+    	inputElementsOfCharacters();
+	}
+	
 	private static void inputElementsOfCharacters() {
+		System.out.print("data: "); //중복!!!!!!!!!!!!!!!!!
     	for (int i = 0; i < size; i++) {
     		characters[i] = scan.next().charAt(0);
         }
     	System.out.println();
 	}
 	
-	private static void sortAscendingOrder() {
-		if (typeOfData == 'n') {
-			sortAscendingOrderOfNumbers();	        
-		}
-		else if (typeOfData == 'c') {
-			sortAscendingOrderOfCharacters();	        
-		}
-		printData( );
+	private static void selectMenuForNumber(int num) {
+		if (num == 2) {
+        	sortAscendingOrderOfNumbers();        	
+        }
+        else if (num == 3) {
+        	sortDescendingOrderOfNumbers();       
+        }
+		printNumbers( );
+	}
+	
+	private static void selectMenuForCharacter(int num) {
+		if (num == 2) {
+        	sortAscendingOrderOfCharacters();        	
+        }
+        else if (num == 3) {
+        	sortDescendingOrderOfCharacters();       
+        }
+		printCharacters( );
 	}
 	
 	private static void sortAscendingOrderOfNumbers() {
@@ -120,16 +123,6 @@ public class Sorting {
                 }
             }
         }
-	}
-	
-	private static void sortDescendingOrder() {
-		if (typeOfData == 'n') {
-			sortDescendingOrderOfNumbers();	        
-		}
-		else if (typeOfData == 'c') {
-			sortDescendingOrderOfCharacters();	        
-		}
-		printData( );
 	}
 	
 	private static void sortDescendingOrderOfNumbers() {
@@ -164,24 +157,17 @@ public class Sorting {
     	characters[j] = temp; 
 	}
 	
-	private static void printData() {
-		if (typeOfData == 'n') {
-			printNumbers();
-		}
-		else if (typeOfData == 'c') {
-			printCharacters();
-		}
-	}
-	
 	private static void printNumbers() {
 		for (int i = 0; i < size; i++) {
             System.out.print(numbers[i] + " ");
         }
+		System.out.println();
 	}
 	
 	private static void printCharacters() {
 		for (int i = 0; i < size; i++) {
             System.out.print(characters[i] + " ");
         }
+		System.out.println();
 	}
 }
