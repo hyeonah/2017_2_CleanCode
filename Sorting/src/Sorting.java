@@ -1,173 +1,142 @@
 import java.util.Scanner;
 
 public class Sorting {
-	private static int[] numbers = null;
-	private static char[] characters = null;
-	private static int menuNum, size;
-	private static char typeOfData;
-	private static boolean showInitialScreen = true;
+	protected static int[] datum = null;
+	protected static int menuNum, size;
+	protected static char typeOfData;
+	protected static boolean showInitialScreen = true;
 	static Scanner scan = new Scanner(System.in);
-	
+
 	public static void main(String[] args) {
-		while (showInitialScreen == true) {      
-	        showMenu();
-	        selectMenu();
+		while (showInitialScreen == true) {
+			showMenu();
+			menuNum = scan.nextInt();
+			selectMenu(menuNum);
 		}
 	}
-	
-	private static void showMenu() {
+
+	public static void showMenu() {
 		System.out.println("[ ID: 1312197 ]");
-        System.out.println("[ Name: 최현아 ]");
-        System.out.println();
-        System.out.println("1. Input data");
-        System.out.println("2. Print data in increasing order");
-        System.out.println("3. Print data in decreasing order");
-        System.out.println("4. Quit");
-        System.out.println();
+		System.out.println("[ Name: 최현아 ]");
+		System.out.println();
+		System.out.println("1. Input data");
+		System.out.println("2. Print data in increasing order");
+		System.out.println("3. Print data in decreasing order");
+		System.out.println("4. Quit");
+		System.out.println();
 	}
-	
-	private static void selectMenu() {
-		menuNum = scan.nextInt();
+
+	protected static int[] selectMenu(int menuNum) {
 		if (menuNum == 1) {
-			selectTypeOfData(); 			
+			return selectTypeOfData();
+		} else if (menuNum == 2) {
+			return sortAscendingOrder(datum);
+		} else if (menuNum == 3) {
+			return sortDescendingOrder(datum);
+		} else if (menuNum == 4) {
+			return escapeMenu();
 		}
-		else if ((typeOfData == 'n') && (menuNum != 4)) { //괄호 안 수정하기!!!!!!
-			selectMenuForNumber(menuNum);
-		}
-		else if ((typeOfData == 'c') && (menuNum != 4)) {
-			selectMenuForCharacter(menuNum);
-		}
-		else if (menuNum == 4) {
-			showInitialScreen = false; 
-		}
+		return null;
 	}
-	
-	private static void selectTypeOfData() {
+
+	protected static int[] selectTypeOfData() {
 		System.out.print("The type of data (n or c): ");
-    	typeOfData = scan.next().charAt(0);
-    	inputNumberOfData();
+		typeOfData = scan.next().charAt(0);
+		return checkType(typeOfData);
 	}
-	
-	private static void inputNumberOfData() {
+
+	protected static int[] checkType(char typeOfData) {
+		if (typeOfData == 'n' || typeOfData == 'c') {
+			return inputNumberOfData(typeOfData);
+		} else
+			return null;
+	}
+
+	protected static int[] inputNumberOfData(char typeOfData) {
 		System.out.print("The number of Data: ");
-    	size = scan.nextInt();
-    	if (typeOfData == 'n') {
-    		setSizeOfnumbers();
-    	}
-    	else if (typeOfData == 'c') {
-    		setSizeOfCharacters();
-    	}
+		size = scan.nextInt();
+		return setSizeOfdatum(size);
 	}
-	
-	private static void setSizeOfnumbers() {
-    	numbers = new int[size];
-    	inputElementsOfNumbers();
+
+	protected static int[] setSizeOfdatum(int size) {
+		datum = new int[size];
+		return inputElementsOfdatum();
 	}
-	
-	private static void inputElementsOfNumbers() {
-		System.out.print("data: "); //중복!!!!!!!!!!!!!!!!
-    	for (int i = 0; i < size; i++) {
-            numbers[i] = scan.nextInt();
-        }
-    	System.out.println();
+
+	protected static int[] inputElementsOfdatum() {
+		System.out.print("data: ");
+		for (int i = 0; i < size; i++) {
+			if (typeOfData == 'n') {
+				datum[i] = scan.nextInt();
+			} else if (typeOfData == 'c') {
+				datum[i] = (int) scan.next().charAt(0);
+			}
+		}
+		System.out.println();
+		return datum;
 	}
-	
-	private static void setSizeOfCharacters() {
-    	characters = new char[size];
-    	inputElementsOfCharacters();
+
+	protected static int[] sortAscendingOrder(int[] datum) {
+		for (int i = 0; i < size; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (datum[i] > datum[j]) {
+					swapOfDatum(i, j);
+				}
+			}
+		}
+		printDatum(datum);
+		return datum;
 	}
-	
-	private static void inputElementsOfCharacters() {
-		System.out.print("data: "); //중복!!!!!!!!!!!!!!!!!
-    	for (int i = 0; i < size; i++) {
-    		characters[i] = scan.next().charAt(0);
-        }
-    	System.out.println();
+
+	protected static int[] sortDescendingOrder(int[] datum) {
+		for (int i = 0; i < size; i++) {
+			for (int j = i + 1; j < size; j++) {
+				if (datum[i] < datum[j]) {
+					swapOfDatum(i, j);
+				}
+			}
+		}
+		printDatum(datum);
+		return datum;
 	}
-	
-	private static void selectMenuForNumber(int num) {
-		if (num == 2) {
-        	sortAscendingOrderOfNumbers();        	
-        }
-        else if (num == 3) {
-        	sortDescendingOrderOfNumbers();       
-        }
-		printNumbers( );
+
+	protected static int[] swapOfDatum(int i, int j) {
+		int temp = datum[i];
+		datum[i] = datum[j];
+		datum[j] = temp;
+		return datum;
 	}
-	
-	private static void selectMenuForCharacter(int num) {
-		if (num == 2) {
-        	sortAscendingOrderOfCharacters();        	
-        }
-        else if (num == 3) {
-        	sortDescendingOrderOfCharacters();       
-        }
-		printCharacters( );
-	}
-	
-	private static void sortAscendingOrderOfNumbers() {
-    	for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
-                if (numbers[i] > numbers[j]) {
-                	swapOfNumbers(i,j);
-                }
-            }
-        }
-	}
-	
-	private static void sortAscendingOrderOfCharacters() { 
-    	for (int i = 0; i < size-1; i++) {
-            for (int j = 1; j < size-i; j++) {
-                if (characters[j-1] > characters[j]) {
-                	swapOfCharacters(i, j);            
-                }
-            }
-        }
-	}
-	
-	private static void sortDescendingOrderOfNumbers() {
-        for (int i = 0; i < size; i++) {
-            for (int j = i + 1; j < size; j++) {
-                if (numbers[i] < numbers[j]) {
-                	swapOfNumbers(i,j);
-                }
-            }
-        }
-	}
-	
-	private static void sortDescendingOrderOfCharacters() {
-		for (int i = 0; i < size-1; i++) {
-            for (int j = 1; j < size-i; j++) {
-                if (characters[j-1] < characters[j]) {
-                	swapOfCharacters(i, j);            
-                }
-            }
+
+	protected static void printDatum(int[] datum) {
+		if (typeOfData == 'n') {
+			printNumbers(datum);
+		} else if (typeOfData == 'c') {
+			printCharacters(datum);
 		}
 	}
-	
-	private static void swapOfNumbers(int i, int j) {
-		int temp = numbers[i];
-        numbers[i] = numbers[j];
-        numbers[j] = temp;
-	}
-	
-	private static void swapOfCharacters(int i, int j) {
-		char temp = characters[j-1];
-    	characters[j-1] = characters[j];
-    	characters[j] = temp; 
-	}
-	
-	private static void printNumbers() {
+
+	protected static int[] printNumbers(int[] datum) {
+		int[] numbers = new int[size];
 		for (int i = 0; i < size; i++) {
-            System.out.print(numbers[i] + " ");
-        }
+			numbers[i] = datum[i];
+			System.out.print(numbers[i] + " ");
+		}
 		System.out.println();
+		return numbers;
 	}
-	
-	private static void printCharacters() {
+
+	protected static char[] printCharacters(int[] datum) {
+		char[] characters = new char[size];
 		for (int i = 0; i < size; i++) {
-            System.out.print(characters[i] + " ");
-        }
+			characters[i] = (char) datum[i];
+			System.out.print(characters[i] + " ");
+		}
 		System.out.println();
+		return characters;
+	}
+
+	protected static int[] escapeMenu() {
+		showInitialScreen = false;
+		return null;
 	}
 }
